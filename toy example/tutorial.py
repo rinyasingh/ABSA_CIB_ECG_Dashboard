@@ -17,16 +17,14 @@
 # xlrd== 1.2.0
 ## LIBRARIES: html, dcc
 from dash import Dash, html, dcc, Input, Output
-import pandas as pf
+import pandas as pd
 import numpy as np 
 import plotly.express as px
-import dash_core_components as dcc
-import dash_html_components as html
 
 df = pd.read_csv('avocado-updated-2020.csv')
 
 app = Dash()
-geo_dropdown = dcc.Dropdown(options=avocado['geography'].unique(), value = 'New York')
+geo_dropdown = dcc.Dropdown(options=df['geography'].unique(), value = 'New York')
 
 # Div component to hold three Dash component children 
 app.layout = html.Div(children = [
@@ -36,8 +34,8 @@ app.layout = html.Div(children = [
         id = 'example-graph',
         figure = {
             'data': [
-                {'x':[1,2,3], 'y': [4,1,2], 'type': 'bar', 'name': 'Delhi'},
-                {'x':[1,2,3], 'y': [2,4,5], 'type'}
+                {'x':[1,2,3], 'y': [4,1,2], 'type':   'bar', 'name': 'Delhi'},
+                {'x':[1,2,3], 'y': [2,4,5], 'type': 'bar', 'name': 'Jhb' },
             ]
         }
     )])
@@ -47,7 +45,7 @@ app.layout = html.Div(children = [
     Input(component_id = geo_dropdown, component_property='value')
 )
 def update_graph (selected_geography):
-    filtered_avocado = avocado[avocado['geography']== selected_gegraphy]
+    filtered_avocado = df[df['geography']== selected_geography]
     line_fig = px.line(filtered_avocado,
         x = 'date', y = 'average_price',
         color = 'type',
